@@ -166,3 +166,96 @@ objItems = {
 
     console.log(objItems.productName);
     console.log(objItems['quantity']);
+
+    objItems.productName = 'Sliced Bread';
+
+    objItems['quantity'] = 10;
+    
+    console.log(objItems);
+
+    objItems.newVariable = 'New';
+    objItems['anotherNewVariable'] = 'Another';
+    console.log(objItems);
+
+    function outputTimesTables(number){
+        for(multiplyer=1; multiplyer <= 12; multiplyer++){
+            sum = multiplyer * number;
+            strMessage = number + ' * ' + multiplyer + ' = ' + sum;
+            console.log(strMessage);
+
+        }
+    }
+for (counter=1; counter <=12; counter++){
+    outputTimesTables(counter);
+}
+
+console.log(shoppingCart);
+
+function totalPriceOfShopping(arrCart,objCoupon){
+    console.log(objCoupon);
+    //SET totalPrice = 0
+    let totalPrice = 0;
+    //LOOP through arrCart
+    for(arrCartKey=0; arrCartKey < arrCart.length; arrCartKey++){
+        let currentItem = arrCart[arrCartKey];
+        // console.log(currentItem);
+        //SET itemPrice = quantity * price
+        let currentItemPrice = currentItem.quantity * currentItem.price;
+        // UPDATE totalPrice + itemPrice
+        if(objCoupon){
+            blnApplyDiscount = false;
+            if(objCoupon.productType == 'all'){
+                blnApplyDiscount = true;
+            }
+            if(objCoupon.productType.includes(currentItem.type)){
+                blnApplyDiscount = true;
+            }
+            switch(objCoupon.type){
+                case 'percent':
+                    if(blnApplyDiscount){
+                        currentItemPrice = (currentItemPrice / 100) * objCoupon.value;
+                    }
+                break;
+                case 'flat':
+                    if(blnApplyDiscount){
+                        currentItemPrice = currentItemPrice - (objCoupon.value * currentItem.quantity);
+                    }
+                break;
+            }
+        }
+        totalPrice = totalPrice + currentItemPrice;
+    }
+        //RETURN totalPrice
+        if(objCoupon){
+            if(objCoupon.type == 'fixed'){
+                totalPrice = totalPrice - objCoupon.value;
+            }
+        }
+        totalPrice = totalPrice.toFixed(2);
+        return totalPrice;
+    }
+    
+    objCouponData = {
+        type:'percent',
+        productType:['toiletries','beverages'],
+        value:'20'
+    }
+    
+    console.log(totalPriceOfShopping(shoppingCart,objCouponData));
+
+    function itemsOfType(arrCart){
+        objItems = {};
+        for(arrCartKey=0; arrCartKey < arrCart.length; arrCartKey++){
+            let currentItem = arrCart[arrCartKey];
+            if(objItems[currentItem.type]){
+                objItems[currentItem.type] = objItems[currentItem.type] + currentItem.quantity;
+            }else {
+                objItems[currentItem.type] = currentItem.quantity;
+            }
+            //console.log(currentItem);
+            //console.log(objItems);
+        }
+        return objItems;
+    }
+
+    console.log(itemsOfType(shoppingCart));
